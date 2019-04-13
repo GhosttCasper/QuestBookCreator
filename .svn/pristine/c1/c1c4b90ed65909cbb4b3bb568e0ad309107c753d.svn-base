@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Drawing;
+
+namespace QuestBookCreator
+{
+    class Paragraph : Node
+    {
+        String name;
+        int x, y;
+
+       public void Draw(Graphics g) 
+       {
+           Pen p = new Pen(Brushes.DeepSkyBlue);
+           g.DrawRectangle(p, x, y, 20, 20);
+       
+       }
+
+
+       public Paragraph()          //чепуха
+       { 
+           Random rnd1 = new Random();
+           x = rnd1.Next(400);
+           y = rnd1.Next(400);
+       
+       
+       }
+    }
+}

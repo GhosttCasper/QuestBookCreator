@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace QuestBookCreator
+{
+    class Constants
+    {
+        public static int panelWidth = 600;         //размер панели
+        public static int panelHeight = 400;
+        public static int nodeWidth = 60;           //размер узла
+        public static int nodeHeight = 40;
+
+
+    }
+}

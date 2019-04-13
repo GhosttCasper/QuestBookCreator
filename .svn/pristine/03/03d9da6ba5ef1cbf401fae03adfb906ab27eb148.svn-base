@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Drawing;
+
+namespace QuestBookCreator
+{
+    interface Node
+    {
+        void Draw(Graphics g);
+        int get_x();
+        int get_y();
+
+        void set_x(int p);
+
+        void set_y(int p);
+    }
+}

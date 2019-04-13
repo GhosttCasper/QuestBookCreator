@@ -1,0 +1,103 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace QuestBookCreator
+{
+    public partial class MainForm : Form
+    {
+        public MainForm()
+        {
+            InitializeComponent();
+        }
+
+        List<Node> pars = new List<Node>();
+        bool flag = false;
+        Node tmp_ver;
+        int raznX = 0, raznY = 0; //для мыши
+
+        public void Redraw()
+        {
+            panel1.Invalidate();
+
+        }
+
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Paragraph p = new Paragraph();
+            pars.Add(p);
+            Redraw();
+            //p.Draw(panel1.d
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            for (int i = 0; i < pars.Count; i++)
+                pars[i].Draw(e.Graphics);
+        }
+
+        private void panel1_DoubleClick(object sender, EventArgs e)
+        {
+            EditForm ef = new EditForm();
+            ef.Show();
+            ef.richTextBox1.Text = "qwert";
+            
+        }
+
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            int mouseX = MousePosition.X - this.Location.X - panel1.Location.X - 3;
+            int mouseY = MousePosition.Y - this.Location.Y - panel1.Location.Y - 26;
+
+            int w=Constants.nodeWidth;
+            int h=Constants.nodeHeight;
+
+            for (int i = 0; i < pars.Count; i++)
+                if (mouseX >= pars[i].get_x() && (mouseX <= pars[i].get_x() + w) && mouseY >= pars[i].get_y() && (mouseY <= pars[i].get_y() + h))
+                {
+                    flag = true;
+                    tmp_ver = pars[i];
+                    raznX = mouseX - pars[i].get_x();
+                    raznY = mouseY - pars[i].get_y();
+                    break;
+                }
+
+        }
+
+        private void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            flag = false;	
+        }
+
+        private void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (flag)
+            {
+                movingNode(tmp_ver);
+                Redraw();
+            }
+        }
+
+
+        void movingNode(Node k)
+        {
+            int mouseX = MousePosition.X - this.Location.X - panel1.Location.X - 3;
+            int mouseY = MousePosition.Y - this.Location.Y - panel1.Location.Y - 26;
+
+            k.set_x(mouseX - raznX);
+            k.set_y(mouseY - raznY);        
+        }
+
+
+
+
+    }
+}

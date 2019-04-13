@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Drawing;
+
+namespace QuestBookCreator
+{
+    class Paragraph : Node
+    {
+        String name;
+        int x, y;
+        public int get_x() { return x; }
+        public int get_y() { return y; }
+        public void set_x(int p) { x = p; }
+        public void set_y(int p) { y = p; }
+
+        public void Draw(Graphics g)
+        {
+            Pen p = new Pen(Brushes.DeepSkyBlue);
+            g.DrawRectangle(p, x, y, Constants.nodeWidth, Constants.nodeHeight);
+
+            Font drawFont = new Font("Arial", Constants.nodeHeight / 2);
+            SolidBrush drawBrush = new SolidBrush(Color.Black);
+            PointF drawPoint = new PointF((x + 1), y);
+            g.DrawString(name, drawFont, drawBrush, drawPoint);
+
+        }
+
+
+        public Paragraph()          //чепуха
+        {
+            Random rnd1 = new Random();
+            x = rnd1.Next(Constants.panelWidth);
+            y = rnd1.Next(Constants.panelHeight);
+            name = rnd1.Next(100).ToString();
+
+
+
+        }
+    }
+}

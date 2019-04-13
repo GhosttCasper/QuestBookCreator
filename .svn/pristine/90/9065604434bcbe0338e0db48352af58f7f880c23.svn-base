@@ -1,0 +1,102 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using iTextSharp;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.IO;
+using System.Windows.Forms;
+
+namespace QuestBookCreator
+{
+    class Proxy
+    {
+
+      //  Project curProj;
+      //  bool fHasNext=false;
+        //static List<Node> en;
+        List<IElement> lElem;
+      //  Node curNod;
+     
+        IElement nextElem;
+
+        //public Proxy(Node curN)
+        //{
+        //    curNod = curN;
+        //    //en = curProj.get_all().GetEnumerator();
+ 
+        //}
+
+
+        public List<IElement> get_processed(Node curN)
+        {
+            int link=0;
+            int cur_sign=0;
+            string tmp = curN.getContent().getInfo();
+            lElem=new List<IElement>();
+
+
+
+            string ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
+            var baseFont = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            var font = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.NORMAL);
+            var font_link = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.ITALIC);
+
+
+            Anchor anchor0 = new Anchor(curN.get_name().ToString()+"\n", font);
+            anchor0.Name = curN.get_name().ToString();
+            lElem.Add(anchor0);
+
+            while (true)
+            {
+
+                link = tmp.IndexOf("[[");
+                if (link == -1)         
+                {
+
+                    nextElem = new Phrase(tmp.Substring(cur_sign), font);      //добавили оставшийся текст     
+                    lElem.Add(nextElem);
+
+                    break;
+                }
+
+                if (link != 0)      //если есть текст до ссылки
+                {
+                    nextElem = new Phrase(tmp.Substring(cur_sign, link - cur_sign), font);      //добавили  текст до ссылки     
+                    lElem.Add(nextElem);
+                    tmp=tmp.Substring(link);        //обрезали начало
+                }
+
+                //обрабатываем ссылку
+                int end_name=tmp.IndexOf("]");
+                string name = tmp.Substring(2, end_name - 2);
+
+                ///Тут короче проверки на корректную ссылку
+                ///
+                //////////..........
+                //.............
+                ///
+                tmp = tmp.Substring(end_name + 3);
+                int end_ref = tmp.IndexOf("]");
+                string reff = tmp.Substring(0, end_ref);
+                tmp = tmp.Substring(end_ref + 2);
+
+
+                Anchor anchor2 = new Anchor(name, font_link);
+                anchor2.Reference = "#"+reff;
+                lElem.Add(anchor2);
+                
+
+
+
+            }
+
+            return lElem;
+        }
+        
+
+
+    }
+}

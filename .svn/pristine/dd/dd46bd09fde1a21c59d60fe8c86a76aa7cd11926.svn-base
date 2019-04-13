@@ -1,0 +1,82 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using iTextSharp;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.IO;
+using System.Windows.Forms;
+
+namespace QuestBookCreator
+{
+    class BookBuilder
+    {
+        //Project curProj;
+
+        public void Create(Project curProj)
+        {
+            var doc = new Document();
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "pdf files (*.pdf)|*.pdf|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+
+                    PdfWriter.GetInstance(doc, myStream);
+                    doc.Open();
+                    List<Node> tmp = curProj.get_all();
+
+                    iTextSharp.text.Paragraph aa;
+
+
+                    string ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
+                    var baseFont = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                    var font = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.NORMAL);
+
+
+
+                    //Anchor anchor1 = new Anchor("website (external reference)", font);
+                    //anchor1.Name = "top";
+                    //doc.Add(anchor1);
+
+                    List<IElement> lElem;
+                    Proxy pr = new Proxy();
+
+                    for (int i = 0; i < tmp.Count; i++)
+                    {
+                        lElem = pr.get_processed(tmp[i]);
+
+                        for (int j = 0; j < lElem.Count; j++)
+                        {
+                            doc.Add(lElem[j]);
+                        }
+                        doc.NewPage();
+                        //aa = new iTextSharp.text.Paragraph(tmp[i].getContent().getInfo(), font);
+                        //doc.Add(aa);
+                        //doc.NewPage();
+                    }
+
+                    //Anchor anchor2 = new Anchor("please jump to a local destination", font);
+                    //anchor2.Reference = "#top1";
+                    //doc.Add(anchor2);
+
+
+
+                    doc.Close();
+                    MessageBox.Show("ok");
+                }
+            }
+
+        }
+
+
+    }
+}
